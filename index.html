@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Stats Explorer for Major League Baseball</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Team Stats Explorer for Major League Baseball">
+  <meta name="author" content="Marc Hidalgo">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Team Stats Explorer for Major League Baseball</h1>
+    <h2>Coursera Developing Data Products Course Project</h2>
+    <p>Marc Hidalgo<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Description of Application</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>This application allows users to view statistics for Major League Baseball (MLB) teams over the period 1969 - 2000</p></li>
+<li><p>Data are viewable by MLB franchises that were in existence during that period (for reference, see <a href="https://en.wikipedia.org/wiki/Timeline_of_Major_League_Baseball">MLB Franchise History</a>).</p></li>
+<li><p>Resultant plots are color coded by general team colors to allow easier inspection of the data. </p></li>
+<li><p>Data for the entire period is plotted for the selected teams(s), but, in some cases (e.g. Blue Jays, Rockies, Marlins), the team came into existence sometime during 1969 - 2000. In these cases, data will only be plotted for the year the franchise existed.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <article data-timings="">
+    <p>Users may select any of the following teams</p>
+
+<pre><code>##  [1] &quot;A&#39;s&quot;           &quot;Angels&quot;        &quot;Astros&quot;        &quot;Blue Jays&quot;    
+##  [5] &quot;Braves&quot;        &quot;Brewers&quot;       &quot;Cardinals&quot;     &quot;Cubs&quot;         
+##  [9] &quot;Diamond Backs&quot; &quot;Dodgers&quot;       &quot;Expos&quot;         &quot;Giants&quot;       
+## [13] &quot;Indians&quot;       &quot;Mariners&quot;      &quot;Marlins&quot;       &quot;Mets&quot;         
+## [17] &quot;Orioles&quot;       &quot;Padres&quot;        &quot;Phillies&quot;      &quot;Pirates&quot;      
+## [21] &quot;Rangers&quot;       &quot;Rays&quot;          &quot;Red Sox&quot;       &quot;Reds&quot;         
+## [25] &quot;Rockies&quot;       &quot;Royals&quot;        &quot;Tigers&quot;        &quot;Twins&quot;        
+## [29] &quot;White Sox&quot;     &quot;Yankees&quot;
+</code></pre>
+
+<p>Available statistics include: </p>
+
+<ul>
+<li><p>Yearly attendance</p></li>
+<li><p>Total runs scored</p></li>
+<li><p>Total runs allowed</p></li>
+<li><p>Wins</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Example Plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>More Information</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>Data used for the application are associated with the UsingR library of the R programming language <a href="https://cran.r-project.org/web/packages/UsingR/">UsingR</a> available from <a href="https://cran.r-project.org/">Comprehensive R Archive Network</a>. </p></li>
+<li><p>Source code is available on  <a href="https://github.com/juanmarc/developing-data-products-project">GitHub</a>.</p></li>
+<li><p>A demo of the application can be found <a href="https://juanmarc.shinyapps.io/developing-data-products-project/">here</a>.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Description of Application'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='NA'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Example Plots'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='More Information'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

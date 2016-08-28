@@ -1,0 +1,203 @@
+---
+title       : Team Stats Explorer for Major League Baseball
+subtitle    : Coursera Developing Data Products Course Project
+author      : Marc Hidalgo
+job         : 
+framework   : io2012
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Description of Application
+
+- This application allows users to view statistics for Major League Baseball (MLB) teams over the period 1969 - 2000
+
+- Data are viewable by MLB franchises that were in existence during that period (for reference, see [MLB Franchise History](https://en.wikipedia.org/wiki/Timeline_of_Major_League_Baseball)).
+
+- Resultant plots are color coded by general team colors to allow easier inspection of the data. 
+
+- Data for the entire period is plotted for the selected teams(s), but, in some cases (e.g. Blue Jays, Rockies, Marlins), the team came into existence sometime during 1969 - 2000. In these cases, data will only be plotted for the year the franchise existed.
+
+---
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(data.table)
+library(rCharts)
+library(reshape2)
+library(markdown)
+library(UsingR)
+
+MLBattend$color <- "black"
+MLBattend$color[MLBattend$franchise == "ANA"] <- "red"
+MLBattend$franchise <- gsub("ANA","Angels",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "CAL"] <- "red"
+MLBattend$franchise <- gsub("CAL","Angels",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "ARI"] <- "darkred"
+MLBattend$franchise <- gsub("ARI","Diamond Backs",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "ATL"] <- "red1"
+MLBattend$franchise <- gsub("ATL","Braves",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "BAL"] <- "darkorange"
+MLBattend$franchise <- gsub("BAL","Orioles",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "BOS"] <- "red2"
+MLBattend$franchise <- gsub("BOS","Red Sox",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "CHIA"] <- "slategray4"
+MLBattend$franchise <- gsub("CHIA","White Sox",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "CHIN"] <- "blue4"
+MLBattend$franchise <- gsub("CHIN","Cubs",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "CIN"] <- "red2"
+MLBattend$franchise <- gsub("CIN","Reds",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "CLE"] <- "darkblue"
+MLBattend$franchise <- gsub("CLE","Indians",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "COL"] <- "blueviolet"
+MLBattend$franchise <- gsub("COL","Rockies",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "DET"] <- "midnightblue"
+MLBattend$franchise <- gsub("DET","Tigers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "FL"] <- "darkturquoise"
+MLBattend$franchise <- gsub("FL","Marlins",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "HOU"] <- "red3"
+MLBattend$franchise <- gsub("HOU","Astros",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "KC"] <- "royalblue4"
+MLBattend$franchise <- gsub("KC","Royals",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "MILA"] <- "navyblue"
+MLBattend$franchise <- gsub("MILA","Brewers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "MILN"] <- "navyblue"
+MLBattend$franchise <- gsub("MILN","Brewers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "LA"] <- "dodgerblue"
+MLBattend$franchise <- gsub("LA","Dodgers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "MIN"] <- "midnightblue"
+MLBattend$franchise <- gsub("MIN","Twins",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "MON"] <- "mediumblue"
+MLBattend$franchise <- gsub("MON","Expos",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "NYA"] <- "navy"
+MLBattend$franchise <- gsub("NYA","Yankees",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "NYN"] <- "blue2"
+MLBattend$franchise <- gsub("NYN","Mets",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "OAK"] <- "springgreen4"
+MLBattend$franchise <- gsub("OAK","A's",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "PHI"] <- "indianred4"
+MLBattend$franchise <- gsub("PHI","Phillies",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "PIT"] <- "black"
+MLBattend$franchise <- gsub("PIT","Pirates",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "SD"] <- "navyblue"
+MLBattend$franchise <- gsub("SD","Padres",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "SEA"] <- "darkslategray"
+MLBattend$franchise <- gsub("SEA","Mariners",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "SF"] <- "darkorange3"
+MLBattend$franchise <- gsub("SF","Giants",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "STL"] <- "red1"
+MLBattend$franchise <- gsub("STL","Cardinals",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "TB"] <- "turquoise4"
+MLBattend$franchise <- gsub("TB","Rays",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "TEX"] <- "firebrick"
+MLBattend$franchise <- gsub("TEX","Rangers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "WAS"] <- "firebrick4"
+MLBattend$franchise <- gsub("WAS","Rangers",MLBattend$franchise, fixed=TRUE)
+MLBattend$color[MLBattend$franchise == "TOR"] <- "blue3"
+MLBattend$franchise <- gsub("TOR","Blue Jays",MLBattend$franchise, fixed=TRUE)
+
+#sort the team list to be in alphabetical order
+teamList <- sort(unique(MLBattend$franchise))
+
+#adjust the year range from 69 - 00 to be from 1969 - 2000
+MLBattend$year <- 1900 + MLBattend$year
+MLBattend$year[MLBattend$year == 1900] <- 2000
+MLBattend$attendance <- MLBattend$attendance/100000
+
+#create MLB and League averages by Year for a reference plot
+MLByears <- sort(unique(MLBattend$year))
+MLBfranchise <- "MLB"
+MLBleague <- "NA"
+MLBdivision <- "NA"
+MLBavgAttend <- mean(MLBattend$attendance[MLBattend$year==MLByears[1]])
+MLBavgScored <- mean(MLBattend$runs.scored[MLBattend$year==MLByears[1]])
+MLBavgAllowed <- mean(MLBattend$runs.allowed[MLBattend$year==MLByears[1]])
+MLBavgWins <- mean(MLBattend$wins[MLBattend$year==MLByears[1]])
+MLBavgLosses <- mean(MLBattend$losses[MLBattend$year==MLByears[1]])
+MLBavgBehind <- mean(MLBattend$games.behind[MLBattend$year==MLByears[1]])
+for(i in 2:length(MLByears))
+{
+  MLBfranchise <- c(MLBfranchise,"MLB")
+  MLBleague <- c(MLBleague,"NA")
+  MLBdivision <- c(MLBdivision,"NA")
+  MLBavgAttend <- c(MLBavgAttend,mean(MLBattend$attendance[MLBattend$year==MLByears[i]]))
+  MLBavgScored <- c(MLBavgScored,mean(MLBattend$runs.scored[MLBattend$year==MLByears[i]]))
+  MLBavgAllowed <- c(MLBavgAllowed,mean(MLBattend$runs.allowed[MLBattend$year==MLByears[i]]))
+  MLBavgWins <- c(MLBavgWins,mean(MLBattend$wins[MLBattend$year==MLByears[i]]))
+  MLBavgLosses <- c(MLBavgLosses,mean(MLBattend$losses[MLBattend$year==MLByears[i]]))
+  MLBavgBehind <- c(MLBavgBehind,mean(MLBattend$games.behind[MLBattend$year==MLByears[i]]))
+}
+MLBavg <- data.frame(franchise = MLBfranchise, league = MLBleague, division = MLBdivision,
+                     year = MLByears, attendance = MLBavgAttend, 
+                     runs.scored = MLBavgScored, runs.allowed = MLBavgAllowed,
+                     wins = MLBavgWins, losses = MLBavgLosses,
+                     games.behind = MLBavgBehind)
+
+```
+
+Users may select any of the following teams
+
+```{r, echo=FALSE}
+teamList
+```
+
+
+Available statistics include: 
+
+- Yearly attendance
+
+- Total runs scored
+
+- Total runs allowed
+
+- Wins
+
+---
+
+## Example Plots
+
+```{r, echo=FALSE}
+      par(mfrow=c(2,1))
+      plot(MLBavg$year,MLBavg$attendance,col='gray', type='l', lwd=3, lty=2,
+           xlim=c(1969,2000),ylim=c(0,50), main="Attendance by Year",
+           ylab="attendance (100K)", xlab="year")
+      #plot data for the user selected team(s)
+      lines(MLBattend$year[MLBattend$franchise == "Angels"],
+            MLBattend$attendance[MLBattend$franchise == "Angels"],
+            col=MLBattend$color[MLBattend$franchise == "Angels"], lwd=4)
+      lines(MLBattend$year[MLBattend$franchise == "Cubs"],
+            MLBattend$attendance[MLBattend$franchise == "Cubs"],
+            col=MLBattend$color[MLBattend$franchise == "Cubs"], lwd=4)
+      lines(MLBattend$year[MLBattend$franchise == "A's"],
+            MLBattend$attendance[MLBattend$franchise == "A's"],
+            col=MLBattend$color[MLBattend$franchise == "A's"], lwd=4)
+      plot(MLBavg$year,MLBavg$attendance, type='l',col='white',xlab=' ',ylab=' ', bg='white', 
+           col.axis='white', col.lab='white', col.main='white', fg='white',
+           xlim=c(1969,2000),ylim=c(0,50))
+      #add legend for the MLB average line centered at the top
+      lines(c(1974,1982),c(45,45),lwd=3,col='gray',lty=2)
+      text(1983,45,"MLB Average (1969 - 2000)", pos=4)
+      lines(c(1970,1974),c(35,35),lwd=4,
+            col=MLBattend$color[MLBattend$franchise == "Angels"])
+      text(1975,35,"Angels", pos=4)
+      lines(c(1982,1986),c(35,35),lwd=4,
+            col=MLBattend$color[MLBattend$franchise == "Cubs"])
+      text(1987,35,"Cubs", pos=4)
+      column <- 1
+      lines(c(1994,1998),c(35,35),lwd=4,
+            col=MLBattend$color[MLBattend$franchise == "A's"])
+      text(1999,35,"A's", pos=4)
+```
+
+--- 
+
+## More Information
+
+- Data used for the application are associated with the UsingR library of the R programming language [UsingR](https://cran.r-project.org/web/packages/UsingR/) available from [Comprehensive R Archive Network](https://cran.r-project.org/). 
+
+- Source code is available on  [GitHub](https://github.com/juanmarc/developing-data-products-project).
+
+- A demo of the application can be found [here](https://juanmarc.shinyapps.io/developing-data-products-project/).
